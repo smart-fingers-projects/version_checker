@@ -38,6 +38,44 @@ class _MyHomePageState extends State<MyHomePage> {
   // Create different version checker configurations
   final _defaultChecker = VersionChecker();
 
+  // Silent checker - suppresses error dialogs for better UX
+  late final _silentChecker = VersionChecker(
+    config: const VersionCheckerConfig(
+      apiUrl: 'https://salawati.smart-fingers.com/api/version/check',
+      showErrorDialogs: false, // Suppress error dialogs
+      timeoutSeconds: 15,
+      updateDialogConfig: DialogConfig(
+        title: 'Update Available',
+        message: 'A new version is available. Would you like to update?',
+        positiveButtonText: 'Update',
+        negativeButtonText: 'Later',
+      ),
+    ),
+  );
+
+  // Error-enabled checker - shows error dialogs (for comparison)
+  late final _errorEnabledChecker = VersionChecker(
+    config: const VersionCheckerConfig(
+      apiUrl: 'https://salawati.smart-fingers.com/api/version/check',
+      showErrorDialogs: true, // Show error dialogs
+      timeoutSeconds: 15,
+      updateDialogConfig: DialogConfig(
+        title: 'Update Available',
+        message: 'A new version is available. Would you like to update?',
+        positiveButtonText: 'Update',
+        negativeButtonText: 'Later',
+      ),
+      errorDialogConfig: DialogConfig(
+        title: 'Update Check Failed',
+        message: 'Unable to check for updates at this time.',
+        positiveButtonText: 'Retry',
+        negativeButtonText: 'Cancel',
+        icon: Icons.error_outline,
+        iconColor: Colors.red,
+      ),
+    ),
+  );
+
   late final _customChecker = VersionChecker(
     config: const VersionCheckerConfig(
       apiUrl: 'https://salawati.smart-fingers.com/api/version/check',
@@ -626,6 +664,65 @@ class _MyHomePageState extends State<MyHomePage> {
 
             const SizedBox(height: 16),
 
+            // Error Dialog Behavior
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Error Dialog Behavior',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                        'Compare silent error handling vs. error dialogs'),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _isLoading
+                                ? null
+                                : () => _simulateError(
+                                    _silentChecker, 'Silent (No Error Dialog)'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.teal,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text('Silent Error Handling'),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: _isLoading
+                                ? null
+                                : () => _simulateError(
+                                    _errorEnabledChecker, 'With Error Dialog'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                            ),
+                            child: const Text('Show Error Dialog'),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Note: Silent mode logs errors to console without showing dialogs to users.',
+                      style:
+                          TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
             // Localized Dialogs
             Card(
               child: Padding(
@@ -891,7 +988,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     try {
       // Create a mock response that simulates a force update scenario
-      final mockResponse = VersionCheckResponse(
+      const mockResponse = VersionCheckResponse(
         success: true,
         currentVersion: '1.0.0',
         platform: 'ios',
@@ -925,7 +1022,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showUpdateDialog() {
-    final mockResponse = VersionCheckResponse(
+    const mockResponse = VersionCheckResponse(
       success: true,
       currentVersion: '1.0.0',
       platform: 'ios',
@@ -945,7 +1042,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void _showForceUpdateDialog() {
-    final mockResponse = VersionCheckResponse(
+    const mockResponse = VersionCheckResponse(
       success: true,
       currentVersion: '1.0.0',
       platform: 'ios',

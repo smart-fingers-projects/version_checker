@@ -17,7 +17,7 @@ A comprehensive Flutter plugin for checking app version updates with customizabl
 ⚡ **Caching Support** - Built-in response caching for better performance
 🎯 **Force Updates** - Support for mandatory app updates
 🔗 **URL Launching** - Direct users to app stores with platform-specific handling
-🛠️ **Error Handling** - Comprehensive error handling with retry functionality
+🛠️ **Error Handling** - Silent error logging with optional error dialogs for better UX
 
 ## Installation
 
@@ -460,6 +460,47 @@ await showDialog(
 | `showNegativeButton` | `bool` | `true` | Show negative button |
 | `barrierDismissible` | `bool` | `true` | Allow dismissing by tapping outside |
 | `icon` | `IconData?` | `null` | Dialog icon |
+
+## Error Dialog Behavior
+
+By default, the plugin provides a better user experience by suppressing error dialogs when version checks fail. Errors are logged silently without interrupting the user:
+
+```dart
+// Default behavior - silent error handling
+final versionChecker = VersionChecker(
+  config: VersionCheckerConfig(
+    apiUrl: 'your-api-url',
+    showErrorDialogs: false, // Default: false
+  ),
+);
+
+// Network errors won't show dialogs to users
+await versionChecker.checkForUpdates(context: context);
+```
+
+To enable error dialogs for debugging or specific use cases:
+
+```dart
+// Enable error dialogs
+final versionChecker = VersionChecker(
+  config: VersionCheckerConfig(
+    apiUrl: 'your-api-url',
+    showErrorDialogs: true, // Show error dialogs
+    errorDialogConfig: DialogConfig(
+      title: 'Update Check Failed',
+      message: 'Unable to check for updates at this time.',
+      positiveButtonText: 'Retry',
+      negativeButtonText: 'Cancel',
+    ),
+  ),
+);
+```
+
+**Benefits of Silent Error Handling:**
+- 🎯 Better user experience - no interruptions from network failures
+- 🔄 Background operation - version checks happen silently
+- 🐛 Debugging support - errors are still logged for developers
+- ⚙️ Optional control - can be enabled when needed
 
 ## Platform Support
 

@@ -15,11 +15,13 @@ dependencies:
 ```
 
 Then run:
+
 ```bash
 flutter pub get
 ```
 
 Import in your Dart files:
+
 ```dart
 import 'package:version_checker/version_checker.dart';
 ```
@@ -70,6 +72,7 @@ Future<VersionCheckResponse> checkForUpdates({
 Checks for app updates and optionally displays dialogs.
 
 **Parameters:**
+
 - `context` (BuildContext?) - Build context for showing dialogs
 - `showDialogs` (bool) - Whether to show dialogs automatically (default: true)
 - `onResult` (VersionCheckCallback?) - Callback for version check results
@@ -81,6 +84,7 @@ Checks for app updates and optionally displays dialogs.
 **Returns:** `Future<VersionCheckResponse>` - Version check results
 
 **Throws:**
+
 - `TimeoutException` - If API request times out
 - `SocketException` - If network connectivity issues occur
 - `FormatException` - If API response format is invalid
@@ -128,6 +132,7 @@ const VersionCheckerConfig({
 | `cacheDurationMinutes` | `int` | `5` | Cache duration in minutes |
 | `locale` | `String?` | `null` | Preferred locale for API responses |
 | `showDialogs` | `bool` | `true` | Whether to show dialogs automatically |
+| `showErrorDialogs` | `bool` | `false` | Whether to show error dialogs when version checking fails |
 | `updateDialogConfig` | `DialogConfig` | `DialogConfig.updateAvailable` | Update dialog configuration |
 | `forceUpdateDialogConfig` | `DialogConfig` | `DialogConfig.forceUpdate` | Force update dialog configuration |
 | `errorDialogConfig` | `DialogConfig` | `DialogConfig.error` | Error dialog configuration |
@@ -206,6 +211,7 @@ The `icon`, `iconColor`, and `iconSize` properties allow you to customize the di
   - Error dialogs: `Icons.error_outline` with `Colors.red[600]`
 
 - **Custom Icon Example:**
+
   ```dart
   DialogConfig(
     icon: Icons.cloud_download,
@@ -219,6 +225,7 @@ The `icon`, `iconColor`, and `iconSize` properties allow you to customize the di
 The `shape` property provides flexible dialog container customization:
 
 - **Rounded Rectangle with Border:**
+
   ```dart
   DialogConfig(
     shape: RoundedRectangleBorder(
@@ -229,6 +236,7 @@ The `shape` property provides flexible dialog container customization:
   ```
 
 - **Circular Dialog:**
+
   ```dart
   DialogConfig(
     shape: CircleBorder(),
@@ -237,6 +245,7 @@ The `shape` property provides flexible dialog container customization:
   ```
 
 - **Stadium Shape:**
+
   ```dart
   DialogConfig(
     shape: StadiumBorder(),
@@ -248,6 +257,7 @@ The `shape` property provides flexible dialog container customization:
 The `DialogConfig` class provides comprehensive text customization capabilities with dynamic placeholder substitution:
 
 **Available Text Properties:**
+
 - `currentVersionText` - Text for displaying current version
 - `latestVersionText` - Text for displaying latest version
 - `updateAvailableText` - Text for update available message
@@ -262,6 +272,7 @@ The `DialogConfig` class provides comprehensive text customization capabilities 
 - `customPlaceholders` - Map of custom placeholder values
 
 **Dynamic Placeholders:**
+
 - `{currentVersion}` - Current app version
 - `{latestVersion}` - Latest available version
 - `{appName}` - Application name (from custom placeholders)
@@ -270,6 +281,7 @@ The `DialogConfig` class provides comprehensive text customization capabilities 
 - Custom placeholders from `customPlaceholders` map
 
 **Basic Text Customization:**
+
 ```dart
 DialogConfig(
   currentVersionText: 'Your version: {currentVersion}',
@@ -284,6 +296,7 @@ DialogConfig(
 ```
 
 **Localized Text Example (Spanish):**
+
 ```dart
 DialogConfig(
   title: '¡Actualización Disponible!',
@@ -301,6 +314,7 @@ DialogConfig(
 ```
 
 **Force Update Text Customization:**
+
 ```dart
 DialogConfig(
   forceUpdateText: 'Version {currentVersion} is no longer supported.',
@@ -316,6 +330,7 @@ DialogConfig(
 ```
 
 **Error Dialog Text Customization:**
+
 ```dart
 DialogConfig(
   errorText: 'Failed to check for {appName} updates: {error}',
@@ -476,6 +491,7 @@ static int compare(String version1, String version2)
 Compares two version strings using semantic versioning rules.
 
 **Returns:**
+
 - `-1` if version1 < version2
 - `0` if version1 == version2
 - `1` if version1 > version2
@@ -508,12 +524,14 @@ static String format(
 Formats text by replacing placeholders with actual values.
 
 **Parameters:**
+
 - `text` - The text template with placeholders
 - `response` - Version check response for version placeholders
 - `appName` - Application name for {appName} placeholder
 - `customPlaceholders` - Map of custom placeholder key-value pairs
 
 **Supported Placeholders:**
+
 - `{currentVersion}` - Current app version from response
 - `{latestVersion}` - Latest available version from response
 - `{appName}` - Application name from parameter
@@ -521,6 +539,7 @@ Formats text by replacing placeholders with actual values.
 - Custom placeholders from the customPlaceholders map
 
 **Example:**
+
 ```dart
 final formatted = TextFormatter.format(
   'Update {appName} from {currentVersion} to {latestVersion}',
@@ -779,6 +798,7 @@ final fullyCustomConfig = DialogConfig(
 #### Text Customization Examples
 
 **Dynamic Text with Placeholders:**
+
 ```dart
 final textCustomConfig = DialogConfig(
   title: 'Update {appName}',
@@ -802,6 +822,7 @@ final textCustomConfig = DialogConfig(
 ```
 
 **Localized Text (Spanish):**
+
 ```dart
 final spanishConfig = DialogConfig(
   title: '¡Actualización Disponible!',
@@ -825,6 +846,7 @@ final spanishConfig = DialogConfig(
 ```
 
 **Force Update Text Customization:**
+
 ```dart
 final forceUpdateConfig = DialogConfig(
   title: 'Critical Update Required',
@@ -846,6 +868,7 @@ final forceUpdateConfig = DialogConfig(
 ```
 
 **Error Dialog Text Customization:**
+
 ```dart
 final errorConfig = DialogConfig(
   title: 'Update Check Failed',
@@ -908,6 +931,48 @@ try {
   print('Unexpected error: $e');
 }
 ```
+
+### Error Dialog Behavior
+
+By default, the plugin suppresses error dialogs to provide a better user experience. Version check failures are logged silently without interrupting the user:
+
+```dart
+// Default behavior - errors logged silently
+final versionChecker = VersionChecker(
+  config: VersionCheckerConfig(
+    apiUrl: 'your-api-url',
+    showErrorDialogs: false, // Default: false
+  ),
+);
+
+// Errors are logged to console but no dialog is shown
+await versionChecker.checkForUpdates(context: context);
+```
+
+To enable error dialogs for debugging or specific use cases:
+
+```dart
+// Enable error dialogs
+final versionChecker = VersionChecker(
+  config: VersionCheckerConfig(
+    apiUrl: 'your-api-url',
+    showErrorDialogs: true, // Show error dialogs
+    errorDialogConfig: DialogConfig(
+      title: 'Update Check Failed',
+      message: 'Unable to check for updates at this time.',
+      positiveButtonText: 'Retry',
+      negativeButtonText: 'Cancel',
+    ),
+  ),
+);
+```
+
+**Benefits of Silent Error Handling:**
+
+- Better user experience - users aren't interrupted by network failures
+- Background operation - version checks happen silently
+- Debugging support - errors are still logged for developers
+- Optional control - can be enabled when needed
 
 ## API Integration
 

@@ -65,6 +65,10 @@ class VersionCheckerConfig {
   /// Whether to show dialogs automatically
   final bool showDialogs;
 
+  /// Whether to show error dialogs to users when version checking fails
+  /// When false, errors are logged silently without interrupting the user
+  final bool showErrorDialogs;
+
   /// Configuration for update available dialog
   final DialogConfig updateDialogConfig;
 
@@ -90,6 +94,7 @@ class VersionCheckerConfig {
     this.cacheDurationMinutes = 5,
     this.locale,
     this.showDialogs = true,
+    this.showErrorDialogs = false,
     this.updateDialogConfig = DialogConfig.updateAvailable,
     this.forceUpdateDialogConfig = DialogConfig.forceUpdate,
     this.errorDialogConfig = DialogConfig.error,
@@ -106,6 +111,7 @@ class VersionCheckerConfig {
     int? cacheDurationMinutes,
     String? locale,
     bool? showDialogs,
+    bool? showErrorDialogs,
     DialogConfig? updateDialogConfig,
     DialogConfig? forceUpdateDialogConfig,
     DialogConfig? errorDialogConfig,
@@ -120,6 +126,7 @@ class VersionCheckerConfig {
       cacheDurationMinutes: cacheDurationMinutes ?? this.cacheDurationMinutes,
       locale: locale ?? this.locale,
       showDialogs: showDialogs ?? this.showDialogs,
+      showErrorDialogs: showErrorDialogs ?? this.showErrorDialogs,
       updateDialogConfig: updateDialogConfig ?? this.updateDialogConfig,
       forceUpdateDialogConfig:
           forceUpdateDialogConfig ?? this.forceUpdateDialogConfig,
@@ -137,6 +144,7 @@ class VersionCheckerConfig {
     enableCaching: true,
     cacheDurationMinutes: 5,
     showDialogs: true,
+    showErrorDialogs: false,
     includeBuildNumber: true,
   );
 

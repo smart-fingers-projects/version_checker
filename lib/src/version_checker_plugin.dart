@@ -220,8 +220,14 @@ class VersionChecker {
       onResult?.call(errorResponse);
       onError?.call();
 
-      // Show error dialog if enabled
-      if (showDialogs && context != null && config.showDialogs) {
+      // Log error silently for debugging
+      print('VersionChecker: Version check failed - ${e.toString()}');
+
+      // Show error dialog only if explicitly enabled
+      if (showDialogs &&
+          context != null &&
+          config.showDialogs &&
+          config.showErrorDialogs) {
         await ErrorDialog.show(
           context,
           error: e.toString(),
@@ -244,12 +250,19 @@ class VersionChecker {
     UserActionCallback? onError,
   }) async {
     if (!response.success) {
-      await ErrorDialog.show(
-        context,
-        error: response.error ?? 'Unknown error occurred',
-        config: config.errorDialogConfig,
-        onDismiss: onDismissed,
-      );
+      // Log error silently for debugging
+      print(
+          'VersionChecker: API response error - ${response.error ?? 'Unknown error occurred'}');
+
+      // Show error dialog only if explicitly enabled
+      if (config.showErrorDialogs) {
+        await ErrorDialog.show(
+          context,
+          error: response.error ?? 'Unknown error occurred',
+          config: config.errorDialogConfig,
+          onDismiss: onDismissed,
+        );
+      }
       return;
     }
 

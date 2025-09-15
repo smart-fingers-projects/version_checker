@@ -35,6 +35,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Robust error handling with user-friendly error messages
   - Silent URL launching option for background operations
   - Platform store URL generation utilities
+- 🔇 **Silent Error Handling** - Improved user experience with suppressed error dialogs
+  - Added `showErrorDialogs` configuration option (default: false)
+  - Error dialogs no longer interrupt users during background version checks
+  - Errors are logged silently to console for debugging purposes
+  - Optional error dialog display for specific use cases
+  - Better UX for background operations
 
 ### Enhanced
 - 📱 **Example App** - Added comprehensive demonstrations

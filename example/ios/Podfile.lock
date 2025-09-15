@@ -31,10 +31,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  package_info_plus: 115f4ad11e0698c8c1c5d8a689390df880f47e85
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
-  version_checker: bcd71e5311bc22e424ddb8d97c4024d11b4daab6
+  package_info_plus: 566e1b7a2f3900e4b0020914ad3fc051dcc95596
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
+  version_checker: 2b8217dc1ee30e278cfdb32cb6005637c68338a9
 
 PODFILE CHECKSUM: 4305caec6b40dde0ae97be1573c53de1882a07e5
 
