@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:version_checker/src/models/version_check_request.dart';
-import 'package:version_checker/src/models/version_check_response.dart';
 import 'package:version_checker/src/models/version_checker_config.dart';
 import 'package:version_checker/src/services/version_checker_service.dart';
 
