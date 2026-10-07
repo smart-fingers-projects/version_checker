@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'models/version_check_response.dart';
@@ -91,8 +90,6 @@ typedef UserActionCallback = void Function();
 ///
 /// @since 1.0.0
 class VersionChecker {
-  static const MethodChannel _channel = MethodChannel('version_checker');
-
   final VersionCheckerConfig config;
   late final VersionCheckerService _service;
 
@@ -345,18 +342,11 @@ class VersionChecker {
 
   /// Get current app version information
   static Future<Map<String, String>> getAppVersion() async {
-    try {
-      final result =
-          await _channel.invokeMethod<Map<Object?, Object?>>('getAppVersion');
-      return Map<String, String>.from(result ?? {});
-    } on PlatformException {
-      // Fallback to package_info_plus
-      final packageInfo = await PackageInfo.fromPlatform();
-      return {
-        'version': packageInfo.version,
-        'buildNumber': packageInfo.buildNumber,
-      };
-    }
+    final packageInfo = await PackageInfo.fromPlatform();
+    return {
+      'version': packageInfo.version,
+      'buildNumber': packageInfo.buildNumber,
+    };
   }
 
   /// Clear cached responses

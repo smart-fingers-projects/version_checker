@@ -22,15 +22,6 @@ dev_dependencies:
   mockito: ^5.4.4
   build_runner: ^2.4.9
 
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.smartfingers.version_checker
-        pluginClass: VersionCheckerPlugin
-      ios:
-        pluginClass: VersionCheckerPlugin
-
 topics:
   - version-check
   - app-update
